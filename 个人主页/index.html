@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>陈堃 · 个人主页</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">
+        <span class="logo-icon">C</span>
+        <span class="logo-text">chenkun</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="#home" class="nav-link active">首页</a>
+      <a href="#about" class="nav-link">关于</a>
+      <a href="#skills" class="nav-link">技能</a>
+      <a href="#projects" class="nav-link">项目</a>
+      <a href="#blog" class="nav-link">博客</a>
+      <a href="#contact" class="nav-link">联系</a>
+    </div>
+  </nav>
+
+  <!-- 主内容区 -->
+  <main class="main">
+    <div class="container">
+      <!-- 左侧：个人简介 -->
+      <div class="left-section">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          辽宁·大连 · 正在学习大模型
+        </div>
+        
+        <h1 class="title">
+          你好，我是 <span class="gradient-text">陈堃</span>
+        </h1>
+        
+        <p class="subtitle">物联网工程在读 · 大模型方向</p>
+        
+        <p class="description">
+          $ 从零训练了
+        </p>
+        
+        <div class="buttons">
+          <button class="btn-primary">看看我的项目</button>
+          <button class="btn-secondary">联系我</button>
+        </div>
+        
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-label">实训项目</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">63.91M</div>
+            <div class="stat-label">模型参数</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">1.24 GB</div>
+            <div class="stat-label">训练语料</div>
+          </div>
+        </div>
+        
+        <div class="scroll-hint">
+          <span>↓</span> 向下滚动了解更多
+        </div>
+      </div>
+      
+      <!-- 右侧：终端窗口 -->
+      <div class="right-section">
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="terminal-title">zsh — profile — 80×24</div>
+          </div>
+          <div class="terminal-body" id="terminal">
+            <!-- 内容由 JS 动态生成 -->
+          </div>
+          <div class="terminal-footer">
+            <span>执行完成 · exit 0</span>
+            <button class="rerun-btn" id="rerunBtn">↻ 重新执行</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
