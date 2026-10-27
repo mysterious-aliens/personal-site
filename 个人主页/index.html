@@ -25,8 +25,8 @@
     </div>
   </nav>
 
-  <!-- 主内容区 -->
-  <main class="main">
+  <!-- 首页 -->
+  <section id="home" class="main section">
     <div class="container">
       <!-- 左侧：个人简介 -->
       <div class="left-section">
@@ -46,8 +46,8 @@
         </p>
         
         <div class="buttons">
-          <button class="btn-primary">看看我的项目</button>
-          <button class="btn-secondary">联系我</button>
+          <a href="#projects" class="btn-primary">看看我的项目</a>
+          <a href="#contact" class="btn-secondary">联系我</a>
         </div>
         
         <div class="stats">
@@ -91,7 +91,134 @@
         </div>
       </div>
     </div>
-  </main>
+  </section>
+
+  <!-- 关于 -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">关于我</h2>
+      <div class="about-content">
+        <p>我是陈堃，大连民族大学物联网工程专业大三学生，方向是大模型与深度学习工程。</p>
+        <p>喜欢从零开始造轮子，从分词器到预训练模型，都自己动手实现过一遍，喜欢把原理搞懂再写代码。</p>
+        <p>目前在做课程设计项目，学习 Web 开发、Git 部署、AI 辅助开发等技术。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技能 -->
+  <section id="skills" class="section">
+    <div class="container">
+      <h2 class="section-title">技能栈</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>编程语言</h3>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">C语言</span>
+            <span class="tag">Java</span>
+            <span class="tag">JavaScript</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>AI / 深度学习</h3>
+          <div class="skill-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">Transformers</span>
+            <span class="tag">LoRA</span>
+            <span class="tag">BPE分词器</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>开发工具</h3>
+          <div class="skill-tags">
+            <span class="tag">Git</span>
+            <span class="tag">GitHub</span>
+            <span class="tag">VS Code</span>
+            <span class="tag">Cursor</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>其他</h3>
+          <div class="skill-tags">
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">51单片机</span>
+            <span class="tag">Proteus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目 -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">实训项目</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>MiniMind 大模型预训练</h3>
+          <p>从零实现 63.91M 参数的中文预训练模型，包括 BPE 分词器、Transformer 架构、预训练流程。</p>
+          <div class="project-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">Transformer</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>SFT 微调作业</h3>
+          <p>在魔搭云端进行 SFT 微调，使用 LoRA 技术微调大模型。</p>
+          <div class="project-tags">
+            <span class="tag">LoRA</span>
+            <span class="tag">Transformers</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>电商图片下载插件</h3>
+          <p>Chrome 扩展插件，使用 Cursor 开发，GitHub Pages 部署。</p>
+          <div class="project-tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">Chrome扩展</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <h3>个人主页网站</h3>
+          <p>深色科技风个人主页，带终端动画效果，GitHub Pages 部署。</p>
+          <div class="project-tags">
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">JavaScript</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 博客 -->
+  <section id="blog" class="section">
+    <div class="container">
+      <h2 class="section-title">博客</h2>
+      <div class="blog-list">
+        <div class="blog-item">
+          <h3>从零实现一个 BPE 分词器</h3>
+          <p>记录手写 BPE 分词器的过程，理解分词原理。</p>
+        </div>
+        <div class="blog-item">
+          <h3>大模型预训练流程记录</h3>
+          <p>从数据准备到模型训练的完整流程。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系 -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 class="section-title">联系我</h2>
+      <div class="contact-content">
+        <p>邮箱：3465473990@qq.com</p>
+        <p>GitHub：github.com/mysterious-aliens</p>
+        <p>欢迎交流学习！</p>
+      </div>
+    </div>
+  </section>
 
   <script src="app.js"></script>
 </body>

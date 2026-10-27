@@ -319,6 +319,135 @@ body {
   background: rgba(255,255,255,.05);
 }
 
+/* 各个 section */
+.section {
+  padding: 80px 48px;
+}
+
+.section .container {
+  grid-template-columns: 1fr;
+  min-height: auto;
+  gap: 30px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.about-content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #999;
+  max-width: 800px;
+}
+
+.about-content p {
+  margin-bottom: 16px;
+}
+
+/* 技能 */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  max-width: 900px;
+}
+
+.skill-category h3 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 项目 */
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1000px;
+}
+
+.project-card {
+  padding: 24px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(74, 144, 217, .3);
+}
+
+.project-card h3 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.project-card p {
+  font-size: 15px;
+  color: #999;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.project-tags {
+  display: flex;
+  gap: 8px;
+}
+
+/* 博客 */
+.blog-list {
+  max-width: 800px;
+}
+
+.blog-item {
+  padding: 20px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.blog-item h3 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.blog-item p {
+  font-size: 15px;
+  color: #999;
+}
+
+/* 联系 */
+.contact-content {
+  font-size: 18px;
+  line-height: 2;
+  color: #999;
+  max-width: 600px;
+}
+
 /* 响应式 */
 @media (max-width: 900px) {
   .container {
@@ -340,5 +469,14 @@ body {
   
   .main {
     padding: 30px 20px;
+  }
+  
+  .section {
+    padding: 50px 20px;
+  }
+  
+  .skills-grid,
+  .projects-grid {
+    grid-template-columns: 1fr;
   }
 }
