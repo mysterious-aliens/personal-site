@@ -106,8 +106,8 @@ onMounted(async () => {
           {{ content.badge }}
         </div>
 
+        <p class="hero-kicker">你好，我是</p>
         <h1 class="title">
-          你好，我是<br />
           <span class="gradient-text">{{ content.name }}</span>
         </h1>
 
