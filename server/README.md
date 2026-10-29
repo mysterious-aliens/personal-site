@@ -57,3 +57,15 @@ npm run build
 ```
 
 后端不可用时，前端自动回退到 `src/defaults.js` 的静态内容。
+
+## 一体化模式（推荐，本地演示用）
+
+`dist/` 构建好之后，Flask 会同时托管前端和 API，一个进程就能演示：
+
+```bash
+npm run build
+python server/app.py
+# 浏览器打开 http://127.0.0.1:5001/personal-site/
+```n
+也可以直接双击项目根目录的 `start_demo.bat`。
+

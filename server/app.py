@@ -20,11 +20,12 @@ import os
 import sqlite3
 import time
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "site.db")
+DIST_DIR = os.path.join(os.path.dirname(BASE_DIR), "dist")
 
 ADMIN_USER = os.environ.get("SITE_ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.environ.get("SITE_ADMIN_PASSWORD", "chenkun2026")
@@ -187,6 +188,21 @@ def reset_content():
     conn.commit()
     conn.close()
     return jsonify({"ok": True})
+
+
+@app.get("/")
+@app.get("/personal-site")
+@app.get("/personal-site/")
+@app.get("/personal-site/index.html")
+def index():
+    if not os.path.exists(os.path.join(DIST_DIR, "index.html")):
+        return jsonify({"ok": False, "error": "还没有构建前端，请先执行 npm run build"}), 503
+    return send_from_directory(DIST_DIR, "index.html")
+
+
+@app.get("/personal-site/<path:filename>")
+def frontend_files(filename):
+    return send_from_directory(DIST_DIR, filename)
 
 
 init_db()
