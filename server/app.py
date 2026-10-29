@@ -34,6 +34,13 @@ SECRET = os.environ.get("SITE_SECRET", "personal-site-dev-secret")
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+
+@app.after_request
+def allow_private_network(resp):
+    # 允许从公网 HTTPS 页面（GitHub Pages）访问本机后端
+    resp.headers["Access-Control-Allow-Private-Network"] = "true"
+    return resp
+
 DEFAULT_CONTENT = {
     "name": "陈堃",
     "role": "物联网工程在读 · 大模型与深度学习方向",

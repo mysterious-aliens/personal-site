@@ -4,6 +4,7 @@ import { DEFAULT_CONTENT } from './defaults'
 import { fetchContent } from './api'
 
 const content = ref(DEFAULT_CONTENT)
+const apiConnected = ref(false)
 const terminalLines = ref([])
 const running = ref(false)
 
@@ -61,6 +62,7 @@ async function loadContent() {
   try {
     const data = await fetchContent()
     content.value = { ...DEFAULT_CONTENT, ...data }
+    apiConnected.value = true
   } catch (err) {
     // 后端没启动时用默认内容，保证静态页面仍可访问
     console.info('后端未连接，使用默认内容：', err.message)
@@ -276,6 +278,6 @@ onMounted(async () => {
     <span class="footer-dot">·</span>
     <span>Built with Vue 3 + Vite + Flask</span>
     <span class="footer-dot">·</span>
-    <a class="footer-link" href="#admin">管理入口</a>
+    <a v-if="apiConnected" class="footer-link" href="#admin">管理入口</a>
   </footer>
 </template>
