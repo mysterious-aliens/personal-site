@@ -212,6 +212,17 @@ def frontend_files(filename):
     return send_from_directory(DIST_DIR, filename)
 
 
+@app.get("/admin")
+@app.get("/admin/")
+@app.get("/personal-site/admin")
+@app.get("/personal-site/admin/")
+def admin_page():
+    """后台管理页：和前台同一个 SPA，靠路径判断渲染 Admin 组件。"""
+    if not os.path.exists(os.path.join(DIST_DIR, "index.html")):
+        return jsonify({"ok": False, "error": "还没有构建前端，请先执行 npm run build"}), 503
+    return send_from_directory(DIST_DIR, "index.html")
+
+
 init_db()
 
 if __name__ == "__main__":

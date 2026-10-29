@@ -5,8 +5,12 @@ import './style.css'
 
 let app = null
 
+function isAdminPage() {
+  return window.location.hash.startsWith('#admin') || window.location.pathname.includes('/admin')
+}
+
 function render() {
-  const isAdmin = window.location.hash.startsWith('#admin')
+  const isAdmin = isAdminPage()
   const root = document.getElementById('app')
   if (app) app.unmount()
   root.innerHTML = ''
@@ -15,4 +19,5 @@ function render() {
 }
 
 window.addEventListener('hashchange', render)
+window.addEventListener('popstate', render)
 render()
