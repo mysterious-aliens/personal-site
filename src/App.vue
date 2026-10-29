@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
+import { DEFAULT_CONTENT } from './defaults'
+import { fetchContent } from './api'
 
+const content = ref(DEFAULT_CONTENT)
 const terminalLines = ref([])
 const running = ref(false)
 
 const commands = [
-  {
-    cmd: 'whoami',
-    output: [{ text: '陈堃 · 大连民族大学 物联网工程' }],
-  },
+  { cmd: 'whoami', output: [{ text: '陈堃 · 大连民族大学 物联网工程' }] },
   {
     cmd: 'cat direction.txt',
     output: [
@@ -17,14 +17,8 @@ const commands = [
       { text: '手写过 BPE 分词器，调过 Llama 3.1 的 LoRA', highlight: true },
     ],
   },
-  {
-    cmd: 'ls skills/',
-    output: [{ text: 'Python   PyTorch   Transformers   LoRA   TypeScript   Git' }],
-  },
-  {
-    cmd: 'git log --oneline -1',
-    output: [{ text: '一切从“先把最小可用版本跑通”开始。' }],
-  },
+  { cmd: 'ls skills/', output: [{ text: 'Python   PyTorch   Transformers   LoRA   TypeScript   Git' }] },
+  { cmd: 'git log --oneline -1', output: [{ text: '一切从“先把最小可用版本跑通”开始。' }] },
 ]
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -42,20 +36,16 @@ async function runTerminal() {
       await sleep(45)
     }
     await sleep(260)
-
     for (const line of item.output) {
       terminalLines.value.push({ type: 'out', ...line })
       await sleep(170)
     }
     await sleep(260)
   }
-
   running.value = false
 }
 
-onMounted(() => {
-  runTerminal()
-
+function observeReveals() {
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -64,7 +54,24 @@ onMounted(() => {
     },
     { threshold: 0.12 }
   )
-  document.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+  document.querySelectorAll('.reveal:not(.visible)').forEach((el) => io.observe(el))
+}
+
+async function loadContent() {
+  try {
+    const data = await fetchContent()
+    content.value = { ...DEFAULT_CONTENT, ...data }
+  } catch (err) {
+    // 后端没启动时用默认内容，保证静态页面仍可访问
+    console.info('后端未连接，使用默认内容：', err.message)
+  }
+}
+
+onMounted(async () => {
+  runTerminal()
+  await loadContent()
+  await nextTick()
+  observeReveals()
 })
 </script>
 
@@ -73,7 +80,7 @@ onMounted(() => {
   <nav class="navbar">
     <div class="nav-left">
       <div class="logo">
-        <span class="logo-icon">C</span>
+        <span class="logo-icon">{{ content.name.slice(0, 1) }}</span>
         <span class="logo-text">chenkun</span>
       </div>
     </div>
@@ -94,17 +101,17 @@ onMounted(() => {
       <div class="hero-copy">
         <div class="status-badge">
           <span class="status-dot"></span>
-          辽宁 · 大连　正在学习大模型
+          {{ content.badge }}
         </div>
 
         <h1 class="title">
           你好，我是<br />
-          <span class="gradient-text">陈堃</span>
+          <span class="gradient-text">{{ content.name }}</span>
         </h1>
 
-        <p class="subtitle">物联网工程在读 · 大模型与深度学习方向</p>
+        <p class="subtitle">{{ content.role }}</p>
         <p class="description">
-          <span class="prompt">$</span> 从零训练 63.91M 参数中文模型，手写 BPE 分词器
+          <span class="prompt">$</span> {{ content.tagline }}
         </p>
 
         <div class="buttons">
@@ -113,20 +120,13 @@ onMounted(() => {
         </div>
 
         <div class="stats">
-          <div class="stat-item">
-            <div class="stat-num">04</div>
-            <div class="stat-label">实训项目</div>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <div class="stat-num">63.91M</div>
-            <div class="stat-label">模型参数</div>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <div class="stat-num">1.24GB</div>
-            <div class="stat-label">训练语料</div>
-          </div>
+          <template v-for="(item, i) in content.stats" :key="i">
+            <div class="stat-item">
+              <div class="stat-num">{{ item.num }}</div>
+              <div class="stat-label">{{ item.label }}</div>
+            </div>
+            <div v-if="i < content.stats.length - 1" class="stat-divider"></div>
+          </template>
         </div>
       </div>
 
@@ -171,17 +171,11 @@ onMounted(() => {
       </div>
 
       <div class="about-card">
-        <div class="avatar">
-          <span>陈</span>
-        </div>
+        <div class="avatar"><span>{{ content.name.slice(0, 1) }}</span></div>
         <div class="about-text">
-          <p>我是陈堃，大连民族大学物联网工程专业大三学生，方向是大模型与深度学习工程。</p>
-          <p>喜欢从零开始造轮子，从分词器到预训练模型都自己动手实现过一遍，喜欢把原理搞懂再写代码。</p>
-          <p>目前在做课程设计项目，学习 Web 开发、Git 部署、AI 辅助开发等技术。</p>
+          <p v-for="(line, i) in content.about" :key="i">{{ line }}</p>
           <div class="about-meta">
-            <span class="meta-item">📍 辽宁 · 大连</span>
-            <span class="meta-item">🎓 大连民族大学</span>
-            <span class="meta-item">💡 大模型工程</span>
+            <span v-for="(m, i) in content.meta" :key="i" class="meta-item">{{ m }}</span>
           </div>
         </div>
       </div>
@@ -197,51 +191,12 @@ onMounted(() => {
       </div>
 
       <div class="skills-grid">
-        <div class="skill-category">
-          <div class="skill-icon">💻</div>
-          <h3>编程语言</h3>
-          <p class="skill-desc">日常写代码的主力语言</p>
+        <div v-for="(skill, i) in content.skills" :key="i" class="skill-category">
+          <div class="skill-icon">{{ skill.icon }}</div>
+          <h3>{{ skill.title }}</h3>
+          <p class="skill-desc">{{ skill.desc }}</p>
           <div class="skill-tags">
-            <span class="tag">Python</span>
-            <span class="tag">C语言</span>
-            <span class="tag">Java</span>
-            <span class="tag">JavaScript</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <div class="skill-icon">🧠</div>
-          <h3>AI / 深度学习</h3>
-          <p class="skill-desc">从训练到微调的完整链路</p>
-          <div class="skill-tags">
-            <span class="tag">PyTorch</span>
-            <span class="tag">Transformers</span>
-            <span class="tag">LoRA</span>
-            <span class="tag">BPE 分词器</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <div class="skill-icon">🛠️</div>
-          <h3>开发工具</h3>
-          <p class="skill-desc">版本管理与 AI 辅助开发</p>
-          <div class="skill-tags">
-            <span class="tag">Git</span>
-            <span class="tag">GitHub</span>
-            <span class="tag">VS Code</span>
-            <span class="tag">Cursor</span>
-          </div>
-        </div>
-
-        <div class="skill-category">
-          <div class="skill-icon">✨</div>
-          <h3>其他</h3>
-          <p class="skill-desc">课程里接触过的技术</p>
-          <div class="skill-tags">
-            <span class="tag">HTML/CSS</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">51单片机</span>
-            <span class="tag">Proteus</span>
+            <span v-for="(tag, j) in skill.tags" :key="j" class="tag">{{ tag }}</span>
           </div>
         </div>
       </div>
@@ -257,43 +212,12 @@ onMounted(() => {
       </div>
 
       <div class="projects-grid">
-        <article class="project-card">
-          <span class="project-index">01</span>
-          <h3>MiniMind 大模型预训练</h3>
-          <p>从零实现 63.91M 参数的中文预训练模型，包括 BPE 分词器、Transformer 架构与训练流程。</p>
+        <article v-for="(p, i) in content.projects" :key="i" class="project-card">
+          <span class="project-index">{{ String(i + 1).padStart(2, '0') }}</span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.desc }}</p>
           <div class="project-tags">
-            <span class="tag">PyTorch</span>
-            <span class="tag">Transformer</span>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <span class="project-index">02</span>
-          <h3>SFT 微调作业</h3>
-          <p>在魔搭云端进行全量 SFT 与 LoRA 微调，理解聊天模板与 loss 遮盖机制。</p>
-          <div class="project-tags">
-            <span class="tag">LoRA</span>
-            <span class="tag">Transformers</span>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <span class="project-index">03</span>
-          <h3>电商图片下载插件</h3>
-          <p>Chrome 扩展插件，使用 Cursor 辅助开发，GitHub Pages 部署。</p>
-          <div class="project-tags">
-            <span class="tag">JavaScript</span>
-            <span class="tag">Chrome 扩展</span>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <span class="project-index">04</span>
-          <h3>个人主页网站</h3>
-          <p>深色科技风个人主页，Vue 3 + Vite 构建，带终端打字机动画，GitHub Pages 部署。</p>
-          <div class="project-tags">
-            <span class="tag">Vue 3</span>
-            <span class="tag">Vite</span>
+            <span v-for="(tag, j) in p.tags" :key="j" class="tag">{{ tag }}</span>
           </div>
         </article>
       </div>
@@ -309,20 +233,12 @@ onMounted(() => {
       </div>
 
       <div class="timeline">
-        <div class="timeline-item">
+        <div v-for="(item, i) in content.blog" :key="i" class="timeline-item">
           <span class="timeline-dot"></span>
           <div class="timeline-body">
-            <span class="timeline-date">2026 · 10</span>
-            <h3>从零实现一个 BPE 分词器</h3>
-            <p>记录手写 BPE 分词器的过程，理解合并规则与词表构建。</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <span class="timeline-dot"></span>
-          <div class="timeline-body">
-            <span class="timeline-date">2026 · 10</span>
-            <h3>大模型预训练流程记录</h3>
-            <p>从数据准备、训练脚本到 loss 曲线的完整流程。</p>
+            <span class="timeline-date">{{ item.date }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
           </div>
         </div>
       </div>
@@ -343,21 +259,23 @@ onMounted(() => {
           <p>课程作业、项目合作或者单纯交流技术，都可以找我。</p>
         </div>
         <div class="contact-actions">
-          <a class="btn-primary" href="mailto:3465473990@qq.com">发邮件</a>
-          <a class="btn-secondary" href="https://github.com/mysterious-aliens" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn-primary" :href="`mailto:${content.contact.email}`">发邮件</a>
+          <a class="btn-secondary" :href="`https://${content.contact.github}`" target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </div>
 
       <div class="contact-lines">
-        <span>邮箱 3465473990@qq.com</span>
-        <span>GitHub github.com/mysterious-aliens</span>
+        <span>邮箱 {{ content.contact.email }}</span>
+        <span>GitHub {{ content.contact.github }}</span>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    <span>© 2026 陈堃</span>
+    <span>© 2026 {{ content.name }}</span>
     <span class="footer-dot">·</span>
-    <span>Built with Vue 3 + Vite</span>
+    <span>Built with Vue 3 + Vite + Flask</span>
+    <span class="footer-dot">·</span>
+    <a class="footer-link" href="#admin">管理入口</a>
   </footer>
 </template>
