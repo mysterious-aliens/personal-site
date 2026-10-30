@@ -145,8 +145,8 @@ body::before {
 /* ---------------- 首屏 ---------------- */
 .hero {
   position: relative;
-  padding: 88px 0 68px;
-  text-align: center;
+  padding: 80px 0 48px;
+  text-align: left;
   overflow: hidden;
 }
 
@@ -167,22 +167,23 @@ body::before {
 .hero-grid {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 56px;
   align-items: center;
 }
 
 .hero-copy {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .hero-copy::before {
   content: "";
-  width: 124px;
-  height: 124px;
-  margin-bottom: 28px;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 22px;
   border-radius: 50%;
   border: 6px solid #fff;
   background: linear-gradient(150deg, #6ee7b7, #10a37f 55%, #38bdf8);
@@ -238,8 +239,8 @@ body::before {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 46px;
+  justify-content: flex-start;
+  margin-bottom: 42px;
 }
 
 .btn-primary,
@@ -278,9 +279,9 @@ body::before {
 
 .stats {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
-  max-width: 620px;
+  max-width: 520px;
   padding: 24px 0 0;
   border-top: 1px solid var(--line);
 }
@@ -314,8 +315,6 @@ body::before {
 /* ---------------- 终端（保留深色做对比） ---------------- */
 .hero-terminal {
   width: 100%;
-  max-width: 700px;
-  margin: 52px auto 0;
 }
 
 .terminal {
@@ -437,7 +436,7 @@ body::before {
 
 /* ---------------- 区块 ---------------- */
 .section {
-  padding: 88px 0;
+  padding: 72px 0;
 }
 
 .section-head {
@@ -924,4 +923,13 @@ body::before {
     opacity: 1;
     transform: none;
   }
+}
+
+@media (max-width: 980px) {
+  .hero { text-align: center; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-copy { align-items: center; }
+  .buttons { justify-content: center; }
+  .stats { justify-content: center; max-width: 620px; margin: 0 auto; }
+  .hero-terminal { max-width: 700px; margin: 0 auto; }
 }
